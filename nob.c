@@ -141,6 +141,7 @@ void cc_cflags(Cmd* cmd) {
   cmd_append(cmd, "-I.", "-I"RAYLIB_PATH"/src", "-I"RAYLIB_PATH"/src/external");
   if (ops.integrate_lua) {
     cmd_append(cmd, "-I"LUA_PATH"/src");
+    cmd_append(cmd, "-DSUPPORT_LUA");
   }
 
 }

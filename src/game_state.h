@@ -5,9 +5,11 @@
 #define    _GAME_STATE_H_
 // game_state interface
 
+#ifdef    SUPPORT_LUA
 #include "lua.h"
 #include "lualib.h"
 #include "lauxlib.h"
+#endif // SUPPORT_LUA
 #include <raylib.h>
 #include "snake_case_api_raylib.h"
 #include "snake_case_api_raymath.h"
@@ -15,9 +17,9 @@
 
 
 
-#ifdef FAKEOUT
+#ifndef    SUPPORT_LUA
 typedef struct slua_State lua_State;
-#endif // FAKEOUT
+#endif // SUPPORT_LUA
 
 
 typedef struct sGameState {
@@ -38,6 +40,17 @@ void      gs_free  (GameState* self);
 // game_state implementation
 
 
+// :i
+
+#ifndef    SUPPORT_LUA
+struct slua_State {
+  void* nothing;
+};
+#endif // SUPPORT_LUA
+
+
+
+
 // :iGameState
 GameState gs_init() {
   GameState self = {0};
@@ -55,6 +68,7 @@ void      gs_update(GameState* self) {
   self->frame++;
 
   if ( is_key_pressed(KEY_A) ) {
+#ifdef SUPPORT_LUA
     if (luaL_dostring(self->L,
         " gs:reset() ") != LUA_OK) {
       fprintf(stderr, "Lua error: %s\n", lua_tostring(self->L, -1));
@@ -62,7 +76,9 @@ void      gs_update(GameState* self) {
       lua_close(self->L);
       return;
     }
-
+#else
+    TraceLog(LOG_INFO, "Lua is not supported in the current build.");
+#endif // SUPPORT_LUA
   }
   if ( is_key_pressed(KEY_S) ) {
     gs_reset(self);

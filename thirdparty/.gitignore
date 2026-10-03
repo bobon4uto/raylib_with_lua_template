@@ -1,0 +1,8 @@
+# https://www.lua.org/download.html
+lua
+# https://github.com/bobon4uto/lua_embed
+lua_embed
+# https://github.com/bobon4uto/no.util
+no.util
+# https://www.raylib.com/
+raylib
